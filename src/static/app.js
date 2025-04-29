@@ -46,30 +46,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Update participants list when an activity is selected
-  activitySelect.addEventListener("change", () => {
-    const selectedActivity = activitySelect.value;
-
-    if (!selectedActivity) {
-      participantsList.innerHTML = "<p>Select an activity to view participants.</p>";
-      return;
-    }
-
-    const activityDetails = Array.from(activitiesList.children).find(card =>
-      card.querySelector("h4").textContent === selectedActivity
-    );
-
-    if (activityDetails) {
-      const participants = activityDetails.querySelector("ul").innerHTML;
-      participantsList.innerHTML = `
-        <h4>Participants for ${selectedActivity}:</h4>
-        <ul>${participants}</ul>
-      `;
-    } else {
-      participantsList.innerHTML = "<p>No participants found for this activity.</p>";
-    }
-  });
-
   // Handle form submission
   signupForm.addEventListener("submit", async (event) => {
     event.preventDefault();
