@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const activitySelect = document.getElementById("activity");
   const signupForm = document.getElementById("signup-form");
   const messageDiv = document.getElementById("message");
+  const participantsList = document.getElementById("participants-list");
 
   // Function to fetch activities from API
   async function fetchActivities() {
@@ -25,6 +26,10 @@ document.addEventListener("DOMContentLoaded", () => {
           <p>${details.description}</p>
           <p><strong>Schedule:</strong> ${details.schedule}</p>
           <p><strong>Availability:</strong> ${spotsLeft} spots left</p>
+          <p><strong>Participants:</strong></p>
+          <ul>
+            ${details.participants.map(participant => `<li>${participant}</li>`).join("")}
+          </ul>
         `;
 
         activitiesList.appendChild(activityCard);
@@ -40,6 +45,30 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error("Error fetching activities:", error);
     }
   }
+
+  // Update participants list when an activity is selected
+  activitySelect.addEventListener("change", () => {
+    const selectedActivity = activitySelect.value;
+
+    if (!selectedActivity) {
+      participantsList.innerHTML = "<p>Select an activity to view participants.</p>";
+      return;
+    }
+
+    const activityDetails = Array.from(activitiesList.children).find(card =>
+      card.querySelector("h4").textContent === selectedActivity
+    );
+
+    if (activityDetails) {
+      const participants = activityDetails.querySelector("ul").innerHTML;
+      participantsList.innerHTML = `
+        <h4>Participants for ${selectedActivity}:</h4>
+        <ul>${participants}</ul>
+      `;
+    } else {
+      participantsList.innerHTML = "<p>No participants found for this activity.</p>";
+    }
+  });
 
   // Handle form submission
   signupForm.addEventListener("submit", async (event) => {
